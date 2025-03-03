@@ -39,4 +39,12 @@ class UserController extends AbstractController {
 
 		return $this->json( $user );
 	}
+
+	#[Route('/api/user/{user}', name: 'api_user_dlete', methods: ['DELETE'], format: 'json')]
+	public function delete(User $user, EntityManagerInterface $em): Response {
+		$em->remove($user);
+		$em->flush();
+
+		return $this->json([]);
+	}
 }

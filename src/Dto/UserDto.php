@@ -10,7 +10,7 @@ class UserDto {
 	#[Assert\Email()]
 	private ?string $email;
 
-
+	//#[Assert\PasswordStrength()]
 	private ?string $password;
 
 	private ?bool $isVerified;
