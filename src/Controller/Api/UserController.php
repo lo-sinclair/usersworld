@@ -24,15 +24,14 @@ class UserController extends AbstractController {
 	public EntityManagerInterface $em;
 
 	#[Route('/api/user', name: 'api_user_index', methods: ['GET'])]
-	public function index(UserRepository $userRepository): Response
+	public function index(): Response
 	{
-		$users = $userRepository->findAll();
+		$users = $this->userService->getAll();
 
 		return $this->json($users , context: [
 			//AbstractNormalizer::GROUPS => ['view_list']
 		]);
 	}
-
 
 	#[Route('/api/user/{id}', name: 'api_user_edit', methods: ['PUT'], format: 'json')]
 	public function update(int $id, #[MapRequestPayload] UserDto $userDto): Response {
