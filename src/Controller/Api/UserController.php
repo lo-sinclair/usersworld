@@ -25,22 +25,34 @@ class UserController extends AbstractController {
 		]);
 	}
 
-	#[Route('/api/user/add', name: 'api_user_add', methods: ['POST'], format: 'json')]
-	public function add(#[MapRequestPayload] UserDto $userDto, EntityManagerInterface $em, UserPasswordHasherInterface $userPasswordHasher): Response {
-		$user = new User();
-		$user->setEmail($userDto->getEmail())
-		     ->setPassword($userPasswordHasher->hashPassword($user, $userDto->getPassword()))
-		     ->setIsVerified($userDto->getIsVerified());
 
-		//$user = User::createFromDto( $userDto );
+	#[Route('/api/user/{id}', name: 'api_user_edit', methods: ['PUT'], format: 'json')]
+	public function update(int $id, #[MapRequestPayload] UserDto $userDto, EntityManagerInterface $em, UserPasswordHasherInterface $userPasswordHasher): Response {
+		$user = $em->getRepository(User::class)->find($id);
 
-		$em->persist( $user );
+		if (!$user) {
+			return $this->json(['message' => 'User not found'], Response::HTTP_NOT_FOUND);
+		}
+
+		// Обновляем только те поля, которые переданы
+		if ($userDto->getEmail()) {
+			$user->setEmail($userDto->getEmail());
+		}
+
+		if ($userDto->getPassword()) {
+			$user->setPassword($userPasswordHasher->hashPassword($user, $userDto->getPassword()));
+		}
+
+		if (!is_null($userDto->getIsVerified())) {
+			$user->setIsVerified($userDto->getIsVerified());
+		}
+
 		$em->flush();
 
-		return $this->json( $user );
+		return $this->json($user);
 	}
 
-	#[Route('/api/user/{user}', name: 'api_user_dlete', methods: ['DELETE'], format: 'json')]
+	#[Route('/api/user/{user}', name: 'api_user_delete', methods: ['DELETE'], format: 'json')]
 	public function delete(User $user, EntityManagerInterface $em): Response {
 		$em->remove($user);
 		$em->flush();
