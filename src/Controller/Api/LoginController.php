@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
-class ApiLoginController extends AbstractController
+class LoginController extends AbstractController
 {
 	#[Route('/api/login', name: 'api_login')]
 	public function index(#[CurrentUser] ?User $user): Response
@@ -21,7 +21,7 @@ class ApiLoginController extends AbstractController
 
 		return $this->json([
 			'message' => 'Welcome to your new controller!',
-			'path' => 'src/Controller/Api/ApiLoginController.php',
+			'path' => 'src/Controller/Api/LoginController.php',
 		]);
 	}
 }
