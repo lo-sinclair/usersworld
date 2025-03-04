@@ -10,7 +10,6 @@ class UserDto {
 	#[Assert\Email()]
 	private ?string $email = null;
 
-	#[Assert\NotBlank]
 	#[Assert\Length(
 		min: 6,
 		max: 4096,
