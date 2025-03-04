@@ -74,4 +74,8 @@ class UserService {
 		$this->em->flush();
 	}
 
+	public function getUserById(int $id): ?User {
+		return $this->em->getRepository(User::class)->find($id);
+	}
+
 }

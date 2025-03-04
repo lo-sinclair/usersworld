@@ -32,6 +32,16 @@ class UserController extends AbstractController {
 		]);
 	}
 
+	#[Route('/api/user/{id}', name: 'api_user_show', methods: ['GET'])]
+	public function show(int $id,): Response
+	{
+		$user = $this->userService->getUserById($id);
+		if (!$user) {
+			return $this->json(['message' => 'User not found'], Response::HTTP_NOT_FOUND);
+		}
+		return $this->json($user);
+	}
+
 	#[Route('/api/user/{id}', name: 'api_user_edit', methods: ['PUT'], format: 'json')]
 	public function update(int $id, #[MapRequestPayload] UserDto $userDto): Response {
 		$user = $this->em->getRepository(User::class)->find($id);
