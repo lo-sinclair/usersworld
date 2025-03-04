@@ -69,4 +69,9 @@ class UserService {
 		return $user;
 	}
 
+	public function deleteUser(User $user): void {
+		$this->em->remove($user);
+		$this->em->flush();
+	}
+
 }
