@@ -44,14 +44,13 @@ class UserController extends AbstractController {
 
 	#[Route('/api/user/{id}', name: 'api_user_edit', methods: ['PUT'], format: 'json')]
 	public function update(int $id, #[MapRequestPayload] UserDto $userDto): Response {
-		$user = $this->em->getRepository(User::class)->find($id);
+		$user = $this->userService->updateUser($id, $userDto);
 
 		if (!$user) {
 			return $this->json(['message' => 'User not found'], Response::HTTP_NOT_FOUND);
 		}
 
-		$updatedUser = $this->userService->updateUser($user, $userDto);
-		return $this->json($updatedUser);
+		return $this->json($user);
 	}
 
 	#[Route('/api/user/{user}', name: 'api_user_delete', methods: ['DELETE'], format: 'json')]

@@ -40,7 +40,13 @@ class UserService {
 		return $user;
 	}
 
-	public function updateUser(User $user, UserDto $userDto): User {
+	public function updateUser(int $id, UserDto $userDto): ?User {
+
+		$user = $this->userRepository->find($id);
+		if(!$user) {
+			return null;
+		}
+
 		if ($userDto->getEmail()) {
 			$user->setEmail($userDto->getEmail());
 		}
